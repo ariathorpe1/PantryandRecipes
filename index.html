@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aria's Pantry & Recipes</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">Aria's Pantry & Recipes</div>
+    <nav class="top-nav">
+      <button class="nav-btn" onclick="nav('home')">Home</button>
+      <button class="nav-btn" onclick="nav('recipes')">Recipes</button>
+      <button class="nav-btn" onclick="nav('pantry')">Pantry</button>
+    </nav>
+  </header>
+
+  <main class="site-main">
+    <!-- HOME -->
+    <section id="home" class="page active">
+      <div class="home-container">
+        <img
+          class="home-image"
+          src="https://i.pinimg.com/736x/29/b1/ae/29b1aef87908c2e557b81d994bf4343c.jpg"
+          alt="Pantry ingredients"
+        />
+        <div class="home-text">
+          <h1>Welcome to Aria's Pantry & Recipes!</h1>
+          <div class="home-buttons">
+            <button class="btn primary" onclick="nav('pantry')">View Pantry</button>
+            <button class="btn accent" onclick="nav('recipes')">View Recipes</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANTRY -->
+    <section id="pantry" class="page">
+      <h2 class="title">Pantry</h2>
+      <div id="pantry-root" class="card"></div>
+    </section>
+
+    <!-- RECIPES -->
+    <section id="recipes" class="page">
+      <h2 class="title">Recipes</h2>
+      <div id="recipes-root" class="card"></div>
+    </section>
+  </main>
+
+  <!-- Toasts -->
+  <div id="toast-root" class="toast-root" aria-live="polite" aria-atomic="true"></div>
+
+  <noscript>
+    Please enable JavaScript to use this app.
+  </noscript>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
