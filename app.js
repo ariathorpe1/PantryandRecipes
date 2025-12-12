@@ -1,4 +1,4 @@
-//router
+// router
 function showPage(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const el = document.getElementById(page);
@@ -8,14 +8,14 @@ function showPage(page) {
 }
 function nav(view) { showPage(view); }
 
-//html
+// html escape
 function h(s) {
   return String(s ?? '').replace(/[&<>"']/g, m => (
     { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]
   ));
 }
 
-//storage
+// storage
 const LS = { ingredients: 'ingredients', recipes: 'recipes' };
 const read = (k) => {
   try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : []; }
@@ -24,7 +24,7 @@ const read = (k) => {
 const write = (k, v) => localStorage.setItem(k, JSON.stringify(v));
 const uuid = () => (crypto?.randomUUID ? crypto.randomUUID() : 'id-' + Math.random().toString(36).slice(2));
 
-//seed data!!
+// seed data (first run only)
 function seedData() {
   if (read(LS.ingredients).length || read(LS.recipes).length) return;
 
@@ -83,7 +83,7 @@ function seedData() {
   write(LS.recipes, recipes);
 }
 
-//measurement math
+// number formatting
 function nice(n) {
   if (n == null || isNaN(n)) return '-';
   const targets = [[1/8,'1/8'],[1/4,'1/4'],[1/3,'1/3'],[1/2,'1/2'],[2/3,'2/3'],[3/4,'3/4']];
@@ -96,20 +96,20 @@ function nice(n) {
   return (Math.round(n*100)/100).toString();
 }
 
-//unit conversions
+// unit conversions
 const volTsp = {tsp:1,tbsp:3,cup:48};
 const volMl  = {ml:1};
 const wt     = {g:1,oz:28.349523125,lb:453.59237};
 function convert(amount, from, to) {
   if (from === to) return amount;
-  if (from === 'unit' || to === 'unit') return null; 
+  if (from === 'unit' || to === 'unit') return null;
   if (volTsp[from] && volTsp[to]) return amount * (volTsp[from]/volTsp[to]);
   if (volMl[from]  && volMl[to])  return amount * (volMl[from]/volMl[to]);
   if (wt[from]     && wt[to])     return amount * (wt[from]/wt[to]);
   return null;
 }
 
-//toasts
+// toasts
 function toast(msg, type='success') {
   const root = document.getElementById('toast-root');
   const t = document.createElement('div');
@@ -119,22 +119,18 @@ function toast(msg, type='success') {
   setTimeout(() => t.remove(), 1800);
 }
 
-//pantry quantities
+// state
 let pantryState = { q: '' };
 let recipeState = { q: '' };
 
-//pantry UI
+// pantry UI
 function renderPantry() {
   const root = document.getElementById('pantry-root');
   const all  = read(LS.ingredients).slice();
-
-  // sort by quantity ascending
   all.sort((a,b) => (a.qty ?? 0) - (b.qty ?? 0));
-
   const list = pantryState.q
     ? all.filter(i => i.name.toLowerCase().includes(pantryState.q.toLowerCase()))
     : all;
-
   root.innerHTML = `
     <div class="toolbar">
       <input placeholder="Search..." value="${h(pantryState.q)}"
@@ -192,7 +188,7 @@ function openIngredientForm(id) {
     </div>
   `;
 
-  // helper to lock unit when discrete
+  // lock unit for discrete
   window.toggleUnitForType = () => {
     const type = document.getElementById('i_type').value;
     const unitEl = document.getElementById('i_unit');
@@ -229,7 +225,7 @@ function deleteIngredient(id) {
   renderPantry();
 }
 
-//recipes UI
+// recipes UI
 function renderRecipes() {
   const root = document.getElementById('recipes-root');
   const all  = read(LS.recipes);
@@ -242,7 +238,7 @@ function renderRecipes() {
       <input placeholder="Search..." value="${h(recipeState.q)}"
              oninput="recipeState.q=this.value;renderRecipes()" />
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <button class="btn accent" onclick="openRecipeForm()">add Recipe</button>
+        <button class="btn accent" onclick="openRecipeForm()">Add Recipe</button>
       </div>
     </div>
     ${ list.length ? list.map(recipeRow).join('') : '<div>No recipes yet.</div>' }
@@ -404,7 +400,7 @@ function deleteRecipe(id) {
   renderRecipes();
 }
 
-//recipe details
+// recipe details
 function openRecipeDetail(id, scale) {
   const detail  = document.getElementById('recipe-detail');
   const recipes = read(LS.recipes);
@@ -478,7 +474,7 @@ function cook(id, scale) {
   renderPantry();
 }
 
-//console tests
+// console checks
 (function(){
   const log=(name,ok)=>console.log(`${ok?'PASS':'FAIL'} - ${name}`);
   log('nav defined', typeof nav==='function');
@@ -491,6 +487,15 @@ function cook(id, scale) {
   log('nice(1/3) ~ 1/3', /1\/3/.test(nice(0.33)) || nice(1/3)==='1/3');
 })();
 
-//boot
+// expose handlers
+Object.assign(window, {
+  nav,
+  renderPantry, renderRecipes,
+  openIngredientForm, saveIngredient, deleteIngredient,
+  openRecipeForm, rf_add, rf_remove, rf_onIng, rf_onQty, rf_onUnit,
+  openRecipeDetail, cook
+});
+
+// boot
 seedData();
 showPage('home');
