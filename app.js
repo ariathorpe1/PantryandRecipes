@@ -1,4 +1,4 @@
-/* ===== Router ===== */
+//router
 function showPage(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const el = document.getElementById(page);
@@ -8,14 +8,14 @@ function showPage(page) {
 }
 function nav(view) { showPage(view); }
 
-/* ===== Small HTML escaper ===== */
+//html
 function h(s) {
   return String(s ?? '').replace(/[&<>"']/g, m => (
     { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]
   ));
 }
 
-/* ===== Storage ===== */
+//storage
 const LS = { ingredients: 'ingredients', recipes: 'recipes' };
 const read = (k) => {
   try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : []; }
@@ -24,7 +24,7 @@ const read = (k) => {
 const write = (k, v) => localStorage.setItem(k, JSON.stringify(v));
 const uuid = () => (crypto?.randomUUID ? crypto.randomUUID() : 'id-' + Math.random().toString(36).slice(2));
 
-/* ===== Seed (only if empty) ===== */
+//seed data!!
 function seedData() {
   if (read(LS.ingredients).length || read(LS.recipes).length) return;
 
@@ -83,7 +83,7 @@ function seedData() {
   write(LS.recipes, recipes);
 }
 
-/* ===== Utilities ===== */
+//measurement math
 function nice(n) {
   if (n == null || isNaN(n)) return '-';
   const targets = [[1/8,'1/8'],[1/4,'1/4'],[1/3,'1/3'],[1/2,'1/2'],[2/3,'2/3'],[3/4,'3/4']];
@@ -96,20 +96,20 @@ function nice(n) {
   return (Math.round(n*100)/100).toString();
 }
 
-/* Unit conversion: tsp/tbsp/cup (volume A), ml (volume B), g/oz/lb (weight) */
+//unit conversions
 const volTsp = {tsp:1,tbsp:3,cup:48};
 const volMl  = {ml:1};
 const wt     = {g:1,oz:28.349523125,lb:453.59237};
 function convert(amount, from, to) {
   if (from === to) return amount;
-  if (from === 'unit' || to === 'unit') return null; // discrete incompatible
+  if (from === 'unit' || to === 'unit') return null; 
   if (volTsp[from] && volTsp[to]) return amount * (volTsp[from]/volTsp[to]);
   if (volMl[from]  && volMl[to])  return amount * (volMl[from]/volMl[to]);
   if (wt[from]     && wt[to])     return amount * (wt[from]/wt[to]);
   return null;
 }
 
-/* Toasts */
+//toasts
 function toast(msg, type='success') {
   const root = document.getElementById('toast-root');
   const t = document.createElement('div');
@@ -119,11 +119,11 @@ function toast(msg, type='success') {
   setTimeout(() => t.remove(), 1800);
 }
 
-/* ===== State ===== */
+//pantry quantities
 let pantryState = { q: '' };
 let recipeState = { q: '' };
 
-/* ===== Pantry UI ===== */
+//pantry UI
 function renderPantry() {
   const root = document.getElementById('pantry-root');
   const all  = read(LS.ingredients).slice();
@@ -229,7 +229,7 @@ function deleteIngredient(id) {
   renderPantry();
 }
 
-/* ===== Recipes UI ===== */
+//recipes UI
 function renderRecipes() {
   const root = document.getElementById('recipes-root');
   const all  = read(LS.recipes);
@@ -242,7 +242,7 @@ function renderRecipes() {
       <input placeholder="Search..." value="${h(recipeState.q)}"
              oninput="recipeState.q=this.value;renderRecipes()" />
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <button class="btn accent" onclick="openRecipeForm()">Add Recipe</button>
+        <button class="btn accent" onclick="openRecipeForm()">add Recipe</button>
       </div>
     </div>
     ${ list.length ? list.map(recipeRow).join('') : '<div>No recipes yet.</div>' }
@@ -404,7 +404,7 @@ function deleteRecipe(id) {
   renderRecipes();
 }
 
-/* ===== Recipe Detail (scale + cook) ===== */
+//recipe details
 function openRecipeDetail(id, scale) {
   const detail  = document.getElementById('recipe-detail');
   const recipes = read(LS.recipes);
@@ -478,7 +478,7 @@ function cook(id, scale) {
   renderPantry();
 }
 
-/* ===== Smoke tests (console) ===== */
+//console tests
 (function(){
   const log=(name,ok)=>console.log(`${ok?'PASS':'FAIL'} - ${name}`);
   log('nav defined', typeof nav==='function');
@@ -491,6 +491,6 @@ function cook(id, scale) {
   log('nice(1/3) ~ 1/3', /1\/3/.test(nice(0.33)) || nice(1/3)==='1/3');
 })();
 
-/* ===== Boot ===== */
+//boot
 seedData();
 showPage('home');
