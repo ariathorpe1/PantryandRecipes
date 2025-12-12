@@ -10,7 +10,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Header & Nav */
+//header & nav
 .site-header {
   background: #1F41B0; /* indigo */
   color: #fff;
@@ -29,12 +29,12 @@ body {
 }
 .nav-btn:hover { background: #fff; color: #E34054; }
 
-/* Layout */
+//layout
 .site-main { padding: 20px; max-width: 1000px; margin: auto; }
 .page { display: none; }
 .page.active { display: block; }
 
-/* Home */
+//home
 .home-container {
   display: flex; align-items: center; justify-content: center;
   gap: 40px; margin-top: 80px; flex-wrap: wrap;
@@ -47,7 +47,7 @@ body {
 .home-text h1 { font-size: 2rem; color: #1F41B0; margin: 0 0 16px; }
 .home-buttons { display: flex; justify-content: center; gap: 12px; }
 
-/* Cards & Buttons */
+//cards & buttons
 .card {
   background: #fff; padding: 16px; border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,.06); margin-bottom: 16px;
@@ -64,13 +64,13 @@ body {
 .btn.secondary:hover { filter: brightness(0.95); }
 .btn.warn:hover { filter: brightness(0.95); }
 
-/* Inputs */
+//inputs
 input, select, textarea {
   width: 100%; padding: 8px; border: 1px solid #e5e7eb; border-radius: 8px; background: #fff;
 }
 label { display: block; font-size: .9rem; color: #374151; margin: 8px 0 4px; }
 
-/* Utilities */
+//utilities
 .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
 .title { font-weight: 700; color: #1F41B0; }
 .muted { color: #6b7280; }
@@ -79,7 +79,7 @@ label { display: block; font-size: .9rem; color: #374151; margin: 8px 0 4px; }
 @media (max-width: 720px) { .grid2 { grid-template-columns: 1fr; } }
 ul { margin: 8px 0 0 18px; }
 
-/* Toasts */
+//toasts
 .toast-root { position: fixed; top: 16px; right: 16px; display: flex; flex-direction: column; gap: 8px; z-index: 50; }
 .toast {
   background: #fff; border-left: 4px solid #1F41B0; padding: 10px 12px;
